@@ -37,5 +37,13 @@ class BaseModel:
         self.updated_at = current_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
 
     def __str__(self):
-        my_object = '['type(self).__name__+'] ('+self.id+') '+json.dumps(self.__dict__)
+        my_object = '['+type(self).__name__+'] ('+self.id+') '+json.dumps(self.__dict__)
         return my_object
+
+    def save(self):
+        self.updated_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+
+    def to_dict(self):
+        obj_dictionary = json.dumps(self.__dict__)
+        obj_dictionary['__class__'] = type(self).__name__
+        return obj_dictionary
