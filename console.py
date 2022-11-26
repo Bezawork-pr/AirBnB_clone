@@ -46,6 +46,9 @@ class HBNBCommand(cmd.Cmd):
                         self.do_all(class_name)
                     elif command == "count()":
                         self.count(class_name)
+                    elif command[0:4] == "show":
+                        _id = class_name + " " +command[5:41]
+                        self.do_show(_id)
                     else:
                         print("*** Unknown syntax: {}".format(arg))
                         return
@@ -105,18 +108,22 @@ class HBNBCommand(cmd.Cmd):
                 my_dict = storage.all()
                 my_id = class_name + "." + class_id
                 try:
-                    d = my_dict[my_id]
+                    d = my_dict[my_id].copy()
                 except:
                     print("** no instance found **")
                     return
                 my_object = "["+class_name+"] ({:s}) {}"
-                f = "%Y-%m-%dT%H:%M:%S.%f"
-                d['created_at'] = datetime.strptime(d['created_at'], f)
-                d['updated_at'] = datetime.strptime(d['updated_at'], f)
                 my_object = my_object.format(class_id, d)
                 print(my_object)
         else:
             print("** class name missing **")
+
+    def _to_dict(self, arg):
+        d = arg.copy()
+        for key, v in arg.items():
+            v['created_at'] = v['created_at'].isoformat()
+            v['updated_at'] = v['updated_at'].isoformat()
+        return d
 
     def do_destroy(self, arg):
         try:
@@ -135,10 +142,7 @@ class HBNBCommand(cmd.Cmd):
             except:
                 print("** no instance found **")
                 return
-            with open("Storage.json", "w") as w:
-                json.dump(d, w)
-            #storage.save()
-
+            storage.save()
 
     def do_all(self, arg):
         try:
