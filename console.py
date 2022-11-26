@@ -47,8 +47,11 @@ class HBNBCommand(cmd.Cmd):
                     elif command == "count()":
                         self.count(class_name)
                     elif command[0:4] == "show":
-                        _id = class_name + " " +command[5:41]
-                        self.do_show(_id)
+                        arg_id = class_name + " " +command[5:41]
+                        self.do_show(arg_id)
+                    elif command[0:7] == "destroy":
+                        arg_id = class_name + " " + command[8:44]
+                        self.do_destroy(arg_id)
                     else:
                         print("*** Unknown syntax: {}".format(arg))
                         return
