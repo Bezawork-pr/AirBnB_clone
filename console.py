@@ -15,6 +15,7 @@ create:
     If the class name is missing, print ** class name missing **
 
 """
+import json
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -31,9 +32,38 @@ class HBNBCommand(cmd.Cmd):
     """class HBNBCommand"""
     prompt = '(hbnb) '
     __classes = ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']
+    __commands = ['all', 'create', 'update', 'destroy', 'show']
 
     def __init__(self):
         super().__init__()
+
+    def default(self, arg):
+        if arg != "":
+            try:
+                class_name, command = arg.split(".")
+                if class_name in HBNBCommand.__classes:
+                    if command == "all()":
+                        self.do_all(class_name)
+                    elif command == "count()":
+                        self.count(class_name)
+                    else:
+                        print("*** Unknown syntax: {}".format(arg))
+                        return
+            except:
+                my_list = list(arg.split(" ")) 
+                if my_list[0] in HBNBCommand.__commands:
+                    pass
+                else:
+                    print("*** Unknown syntax: {}".format(arg))
+
+    def count(self, class_name):
+        get_objects = storage.all()
+        count = 0
+        for key, value in get_objects.items():
+            class_nam, id_ = key.split(".")
+            if class_nam == class_name:
+                count += 1
+        print(count)
 
     def do_quit(self, arg):
         """Quit command to exit the program\n"""
@@ -98,17 +128,23 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **") 
             return
         if class_name in HBNBCommand.__classes and class_id != "":
-            my_dict = storage.all()
+            d = storage.all()
             my_id = class_name + "." + class_id
             try:
-                del my_dict[my_id]
+                del d[my_id]
             except:
                 print("** no instance found **")
                 return
-            storage.save()
+            with open("Storage.json", "w") as w:
+                json.dump(d, w)
+            #storage.save()
 
 
     def do_all(self, arg):
+        try:
+            arg, command = arg.split(".")
+        except:
+            pass
         if arg in HBNBCommand.__classes or arg == "":
             my_dict = storage.all()
             my_list = []
