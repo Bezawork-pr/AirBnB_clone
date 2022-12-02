@@ -31,8 +31,6 @@ class HBNBCommand(cmd.Cmd):
                  'City', 'Amenity', 'Place', 'Review']
     __commands = ['all', 'create', 'update', 'destroy', 'show']
 
-   
-    
     def default(self, arg):
         """ Enables consloe manipulate instance using commands like
         <class name>.command()"""
@@ -93,8 +91,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if arg != "":
             if arg in HBNBCommand.__classes:
-                cls = globals()[arg]
-                my_model = cls()
+                my_model = eval(arg)()
                 storage.new(my_model.to_dict())
                 storage.save()
                 print(my_model.id)
