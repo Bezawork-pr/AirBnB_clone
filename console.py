@@ -7,6 +7,7 @@ The class uses cmd module
 The command interpretor should implement
 quit and EOF to exit the program
 This class deals with providing custom prompt
+upload fixed bug
 """
 import cmd
 from models.base_model import BaseModel
