@@ -7,6 +7,7 @@ The class uses cmd module
 The command interpretor should implement
 quit and EOF to exit the program
 This class deals with providing custom prompt
+upload fixed bug
 """
 import cmd
 from models.base_model import BaseModel
@@ -31,8 +32,6 @@ class HBNBCommand(cmd.Cmd):
                  'City', 'Amenity', 'Place', 'Review']
     __commands = ['all', 'create', 'update', 'destroy', 'show']
 
-   
-    
     def default(self, arg):
         """ Enables consloe manipulate instance using commands like
         <class name>.command()"""
@@ -93,8 +92,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if arg != "":
             if arg in HBNBCommand.__classes:
-                cls = globals()[arg]
-                my_model = cls()
+                my_model = eval(arg)()
                 storage.new(my_model.to_dict())
                 storage.save()
                 print(my_model.id)
