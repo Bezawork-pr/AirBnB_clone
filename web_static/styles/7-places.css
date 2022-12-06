@@ -1,5 +1,10 @@
+.places {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
 .places article {
-	display: inline-block;
 	width: 390px;
 	padding: 20px;
 	margin: 20px;
@@ -14,3 +19,4 @@
 	font-size: 30px;
 	text-align: center;
 }
+
